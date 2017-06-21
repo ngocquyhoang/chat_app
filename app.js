@@ -4,15 +4,20 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
+var $ = require('jquery');
 
 var index = require('./routes/index');
 var users = require('./routes/users');
 
+// Express
 var app = express();
+
+// Socket.io
+app.io = require('socket.io')();
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'jade');
+app.set('view engine', 'ejs');
 
 app.use(favicon(path.join(__dirname, 'public', 'favicon.png')));
 app.use(logger('dev'));
@@ -23,7 +28,6 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', index);
 app.use('/users', users);
-app.use(express.static('public'));
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
@@ -41,6 +45,16 @@ app.use(function(err, req, res, next) {
   // render the error page
   res.status(err.status || 500);
   res.render('error');
+});
+
+// Socket.io events
+app.io.on('connection', function(socket){  
+  console.log('A user connected');
+
+  socket.on('new message', function(msg){
+    console.log('new message: ' + msg);
+    app.io.emit('chat message', msg);
+  });
 });
 
 module.exports = app;
