@@ -6,6 +6,12 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var $ = require('jquery');
 
+
+// Mongo DB
+var MongoClient = require('mongodb').MongoClient;
+var MongoUrl = 'mongodb://localhost:27017/chat_app';
+
+// Routes
 var index = require('./routes/index');
 var users = require('./routes/users');
 
@@ -29,7 +35,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', index);
 app.use('/users', users);
 
-// catch 404 and forward to error handler
+// Catch 404 and forward to error handler
 app.use(function(req, res, next) {
   var err = new Error('Not Found');
   err.status = 404;
@@ -53,7 +59,47 @@ app.io.on('connection', function(socket){
 
   socket.on('new message', function(msg){
     console.log('new message: ' + msg);
+
+    MongoClient.connect( MongoUrl , function (err, db) {
+      if (err) {
+        console.log('Unable to connect to the mongoDB server. Error:', err);
+      } else {
+        console.log('Connection established to', MongoUrl);
+
+        var collection = db.collection('messages');
+
+        collection.insert({ content: msg }, function(err, o) {
+          if (err) { 
+            console.log(err.message); 
+          }else { 
+            console.log("chat message inserted into db: " + msg); 
+          }
+        });
+
+        db.close();
+      }
+    })
+
     app.io.emit('chat message', msg);
+  });
+
+  MongoClient.connect( MongoUrl , function (err, db) {
+    if (err) {
+      console.log('Unable to connect to the mongoDB server. Error:', err);
+    } else {
+      console.log('Connection established to', MongoUrl);
+
+      var collection = db.collection('messages')
+
+      var stream = collection.find().sort().limit(10).stream();
+      stream.on('data', function (chat) { socket.emit('chat message', chat.content); });
+    }
+    
+    db.close();
+  });
+
+  socket.on('disconnect', function () {
+    console.log('User disconnected');
   });
 });
 
