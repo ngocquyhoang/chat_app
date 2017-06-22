@@ -6,10 +6,13 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var $ = require('jquery');
 
+// Environment Variables
+var dotenv = require('dotenv');
+dotenv.load();
 
 // Mongo DB
 var MongoClient = require('mongodb').MongoClient;
-var MongoUrl = 'mongodb://localhost:27017/chat_app';
+var MongoUrl = process.env.DB_MONGO_URL;
 
 // Routes
 var index = require('./routes/index');
@@ -92,6 +95,7 @@ app.io.on('connection', function(socket){
       var collection = db.collection('messages')
 
       var stream = collection.find().sort().limit(10).stream();
+
       stream.on('data', function (chat) { socket.emit('chat message', chat.content); });
     }
     
