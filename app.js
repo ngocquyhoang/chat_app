@@ -4,7 +4,6 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
-var $ = require('jquery');
 
 // Environment Variables
 var dotenv = require('dotenv');
@@ -70,7 +69,6 @@ app.io.on('connection', function(socket){
         console.log('Connection established to', MongoUrl);
 
         var collection = db.collection('messages');
-
         collection.insert({ content: msg }, function(err, o) {
           if (err) { 
             console.log(err.message); 
@@ -78,8 +76,6 @@ app.io.on('connection', function(socket){
             console.log("chat message inserted into db: " + msg); 
           }
         });
-
-        db.close();
       }
     })
 
@@ -93,13 +89,9 @@ app.io.on('connection', function(socket){
       console.log('Connection established to', MongoUrl);
 
       var collection = db.collection('messages')
-
       var stream = collection.find().sort().limit(10).stream();
-
       stream.on('data', function (chat) { socket.emit('chat message', chat.content); });
     }
-    
-    db.close();
   });
 
   socket.on('disconnect', function () {
