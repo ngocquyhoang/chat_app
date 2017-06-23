@@ -1,3 +1,5 @@
+'use strict';
+
 var express = require('express');
 var path = require('path');
 var favicon = require('serve-favicon');
@@ -9,9 +11,11 @@ var bodyParser = require('body-parser');
 var dotenv = require('dotenv');
 dotenv.load();
 
-// Mongo DB
-var MongoClient = require('mongodb').MongoClient;
-var MongoUrl = process.env.DB_MONGO_URL;
+var Message = require('./models/messageModel');
+
+// Passport
+var passport = require('passport');
+var LocalStrategy = require('passport-local').Strategy;
 
 // Routes
 var index = require('./routes/index');
@@ -59,39 +63,20 @@ app.use(function(err, req, res, next) {
 app.io.on('connection', function(socket){  
   console.log('A user connected');
 
-  socket.on('new message', function(msg){
-    console.log('new message: ' + msg);
+  socket.on('new message', function(new_message){
+    var message_params = { user_id : '', room_id : '', content : new_message, create_at : Date.now() };
 
-    MongoClient.connect( MongoUrl , function (err, db) {
-      if (err) {
-        console.log('Unable to connect to the mongoDB server. Error:', err);
-      } else {
-        console.log('Connection established to', MongoUrl);
-
-        var collection = db.collection('messages');
-        collection.insert({ content: msg }, function(err, o) {
-          if (err) { 
-            console.log(err.message); 
-          }else { 
-            console.log("chat message inserted into db: " + msg); 
-          }
-        });
-      }
+    Message.create( message_params, function( err, message ){
+      if( err ) throw err;
+      app.io.emit( 'chat message', message.content );
     })
-
-    app.io.emit('chat message', msg);
   });
 
-  MongoClient.connect( MongoUrl , function (err, db) {
-    if (err) {
-      console.log('Unable to connect to the mongoDB server. Error:', err);
-    } else {
-      console.log('Connection established to', MongoUrl);
-
-      var collection = db.collection('messages')
-      var stream = collection.find().sort().limit(10).stream();
-      stream.on('data', function (chat) { socket.emit('chat message', chat.content); });
-    }
+  Message.list ( function( err, list_messages ) {
+    if( err ) throw err;
+    list_messages.forEach( function( item, index) {
+      app.io.emit('chat message', item.content);
+    });
   });
 
   socket.on('disconnect', function () {
