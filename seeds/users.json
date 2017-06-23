@@ -1,0 +1,36 @@
+[
+  {
+    "name": "Leesin",
+    "email": "leesin@gmail.com",
+    "password": "",
+    "rooms": [
+      {
+        "room_id": "",
+        "nick_name": "Kungfu master"
+      },
+      {
+        "room_id": "",
+        "nick_name": "Kungfu master"
+      }
+    ],
+    "birth_day": "new Date('1990, 1, 1, 00, 00, 00')",
+    "signup_at": "new Date('2017, 06, 22, 21, 00, 00')"
+  },
+  {
+    "name": "Leblance",
+    "email": "leblanc@gmail.com",
+    "password": "",
+    "rooms": [
+      {
+        "room_id": "",
+        "nick_name": "Magic master"
+      },
+      {
+        "room_id": "",
+        "nick_name": "Magic master"
+      }
+    ],
+    "birth_day": "new Date('1990, 1, 1, 00, 00, 00')",
+    "signup_at": "new Date('2017, 06, 22, 21, 00, 00')"
+  }
+]
