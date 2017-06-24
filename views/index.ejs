@@ -4,24 +4,43 @@
     <title><%= title %></title>
     <link rel='stylesheet', href='/stylesheets/style.css'>
     <link rel='shortcut icon', href='/favicon.png'>
+    <link rel='stylesheet' href='/stylesheets/pnotify.min.css'>
+    <link rel='stylesheet' href='/stylesheets/animate.css'>
+    <link rel='stylesheet' href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css'>
   </head>
   <body>
     <h1>Wellcome <%= title %></h1>
-    <ul id="messages-area"></ul>
-    <form id="form" onsubmit="return false;">
-      <input id="new-message" type="text" /><button onclick="sendFunction()">Send</button>
+    <ul id='messages-area'></ul>
+    <form id='form' onsubmit='return false;'>
+      <input id='new-message' type='text' /><button onclick='sendFunction()'>Send</button>
     </form>
   </body>
-  <script src="/socket.io/socket.io.js"></script>
-  <script src="/javascripts/jquery.min.js"></script>
-  <script type="text/javascript">
+  <script src='/socket.io/socket.io.js'></script>
+  <script src='https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js'></script>
+  <script src='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js'></script>
+  <script src='/javascripts/pnotify.min.js'></script>
+  <script type='text/javascript'>
     var socket = io();
     function sendFunction() {
       socket.emit('new message', $('#new-message').val());
       $('#new-message').val('');
     };
+
     socket.on('chat message', function(msg){
       $('#messages-area').append($('<li>').text(msg));
+    });
+
+    socket.on('notify', function(content, type){
+      new PNotify({
+        text: content,
+        addclass: 'notice-' + type,
+        animate: {
+          animate: true,
+          in_class: 'rotateInDownLeft',
+          out_class: 'rotateOutUpRight'
+        },
+        icon: false
+      });
     });
   </script>
   </script>
