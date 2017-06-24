@@ -11,6 +11,7 @@ var bodyParser = require('body-parser');
 var dotenv = require('dotenv');
 dotenv.load();
 
+// Message Model
 var Message = require('./models/messageModel');
 
 // Passport
@@ -66,9 +67,12 @@ app.io.on('connection', function(socket){
   socket.on('new message', function(new_message){
     var message_params = { user_id : '', room_id : '', content : new_message, create_at : Date.now() };
 
-    Message.create( message_params, function( err, message ){
-      if( err ) throw err;
-      app.io.emit( 'chat message', message.content );
+    Message.create( message_params, function( error, message ){
+      if( error ) { 
+        app.io.emit( 'notify', error.errors.content.message, 'success' );
+      } else {
+        app.io.emit( 'chat message', message.content );
+      }
     })
   });
 

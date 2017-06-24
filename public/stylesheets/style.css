@@ -1,8 +1,27 @@
-body {
-  padding: 50px;
-  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+/* NOTICE STYLES */
+
+.ui-pnotify-closer:active,
+.ui-pnotify-sticker:active,
+.ui-pnotify-closer:focus,
+.ui-pnotify-sticker:focus,  {
+  outline: none;
 }
 
-a {
-  color: #00B7FF;
+.notice-alert .brighttheme{
+  background-color:  #f0ad4e;
+  border: 1px solid #f0ad4e;
+  color: #ffffff;
+}
+
+.notice-success .brighttheme,
+.notice-notice .brighttheme {
+  background-color: #5cb85c;
+  border: 1px solid #5cb85c;
+  color: #ffffff;
+}
+
+.notice-error .brighttheme {
+  background-color: #d9534f;
+  border: 1px solid #d9534f;
+  color: #ffffff;
 }
