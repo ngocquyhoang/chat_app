@@ -1,5 +1,0 @@
-{
-	"undefined": "localhost/chat_app_database",
-	"dev": "localhost/chat_app_database",
-	"prod": "localhost/chat_app_database"
-}
