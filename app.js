@@ -20,7 +20,6 @@ var LocalStrategy = require('passport-local').Strategy;
 
 // Routes
 var index = require('./routes/index');
-// var users = require('./routes/users');
 
 // Express
 var app = express();
