@@ -7,13 +7,15 @@ var index = function(req, res) {
 
   Room.isset(url, function (err, count){ 
     if( count > 0 ){
-      console.log('True');
+      
     } else {
-      console.log('False');
-    }
-  });
+      url = '59557f3c02e385223174dff9';
+    };
 
-  res.render('dashboard', { title: 'Expresssss',  });
+    Room.findById(url, function (error, room){
+      res.render('dashboard', { title: 'Express dashboard', target: url, roomTitle: room.title });
+    });
+  });
 };
 
 module.exports = { index }

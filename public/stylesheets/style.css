@@ -156,8 +156,21 @@
 }
 
 .main-content .main-chat {
-  height: calc( 100vh - 61px );
-  padding: 20px 0px 0px 20px;
+  height: calc( 100vh - 120px );
+  padding: 0px 0px 0px 20px;
+}
+
+.main-content .room-header {
+  height: 58px;
+}
+
+.main-content .room-header .room-detail {
+  margin-top: 0px;
+  margin-bottom: 0px;
+  text-align: center;
+  font-size: 20px;
+  line-height: 58px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.3);
 }
 
 .list-messages .message-item {

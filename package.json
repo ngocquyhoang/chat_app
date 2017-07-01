@@ -16,6 +16,8 @@
     "express": "~4.15.2",
     "express-session": "^1.15.3",
     "jade": "~1.11.0",
+    "moment": "^2.18.1",
+    "moment-timezone": "^0.5.13",
     "mongodb": "^2.2.29",
     "mongoose": "^4.10.8",
     "morgan": "~1.8.1",
