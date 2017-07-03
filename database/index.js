@@ -2,7 +2,7 @@
 
 var Mongoose = require('mongoose');
 Mongoose.Promise = global.Promise;
-Mongoose.connect(process.env.DB_MONGO_URL);
+Mongoose.connect(process.env.MONGODB_URI);
 
 Mongoose.connection.on('error', function(err) {
   console.log(err);
