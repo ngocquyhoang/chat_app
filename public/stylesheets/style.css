@@ -129,6 +129,7 @@
 .list-target .target-item {
   padding: 7px 10px;
   cursor: pointer;
+  transition: all 1s;
 }
 
 .list-target .active {
@@ -213,6 +214,24 @@
 .main-content .main-chat {
   height: calc( 100vh - 120px );
   padding: 0px 0px 0px 20px;
+  position: relative;
+}
+
+.main-content .main-chat #mainChatLoading {
+  height: calc( 100vh - 120px );
+  width: 100%;
+  position: absolute;
+  z-index: 99;
+  top: 0px;
+  left: 0px;
+  background-color: #ffffff;
+  text-align: center;
+  display: none;
+  line-height: calc( 100vh - 120px );
+}
+
+#mainChatLoading .loading-icon {
+  width: 100px;
 }
 
 .main-content .room-header {
@@ -426,3 +445,4 @@ label[aria-expanded="true"]:after {
   border-top: 0px;
   padding-top: 0px;
 }
+

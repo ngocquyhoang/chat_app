@@ -8,15 +8,15 @@ var create = function (data, callback){
 };
 
 var list = function(callback){
-  var listRooms = roomModel.find(callback);
+  roomModel.find().sort({ create_at: 'ascending'}).exec(callback);
 };
 
 var isset = function (data_id, callback){
-  roomModel.count({ _id: data_id }, callback);
+  roomModel.count({ _id: data_id }).exec(callback);
 };
 
 var findById = function (data_id, callback){
-  roomModel.findById(data_id, callback);
+  roomModel.findById(data_id).exec(callback);
 };
 
 module.exports = { create, list, findById, isset };

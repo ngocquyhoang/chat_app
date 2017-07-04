@@ -38,10 +38,13 @@
             <h2 class="room-detail"><%= roomTitle %></h2>
           </div>
           <div id="mainChat" class="main-chat">
+            <div id="mainChatLoading">
+              <img src="./images/loading.svg" class="loading-icon">
+            </div>
             <div id="mainChatNano" class="nano">
               <div class="nano-content">
                 <ul class="list-unstyled list-messages" id="listMessages" data-target="<%= target %>" >
-                  <li class="message-item right-message">
+                 <!--  <li class="message-item right-message">
                     <p class="message-time">6/30/2017, 2:29:20 AM</p>
                     <div class="table-panel">
                       <div class="table-child ver-mid">
@@ -66,7 +69,7 @@
                         </div>
                       </div>
                     </div>
-                  </li>
+                  </li> -->
                 </ul>
               </div>
             </div>
@@ -179,7 +182,9 @@
     };
 
     function sendMessage() {
-      socket.emit('new message', $('#messageInput').data('target'), $('#messageInput').val());
+      if ($('#messageInput').val() != '') {
+        socket.emit('new message', $('#messageInput').data('target'), $('#messageInput').val());
+      };
       $('#messageInput').val('');
       $('#messageInput').focus();
     };
@@ -214,29 +219,62 @@
       }
     }
 
-    socket.on('chat message', function(listMessageTarget, messageHtml){
+    function changeRoom(params){
+      var current = $('#listRooms .active').attr('data-target-id');
+      var target = $(params).attr('data-target-id');
+
+      if ( current != target) {
+        $('#mainChatLoading').show(0);
+        socket.emit('change room', target);
+      }
+    }
+
+    socket.on('room was change', function( room, listMessageTarget, messageHtml ){
+      $('#listRooms .target-item').removeClass('active');
+      $('#listRooms .target-item[data-target-id="' + room._id + '"]').addClass('active');
+      $('.room-detail').html(room.title);
+      $('#listMessages').attr('data-target', room._id);
+      $('#listMessages .message-item').remove();
+      $(listMessageTarget).append(messageHtml);
+      $('#mainChatLoading').fadeOut(500);
+
+      document.title = room.title + ' room';
+      window.history.pushState('', '', '/' + room._id );
+    });
+
+    socket.on('chat message', function(listMessageTarget, messageHtml, messageContent){
       $(listMessageTarget).append(messageHtml);
       $("#mainChatNano").nanoScroller();
       $("#mainChatNano").nanoScroller({ scroll: 'bottom' });
+
+      // Update last message on room bar
     });
 
-    socket.on('add new room', function(roomHtml){
+    socket.on('add new room', function(roomHtml, roomId, isNewRoom ){
       $('#listRooms').prepend(roomHtml);
       $('#leftBarNano').nanoScroller();
       $('#leftBarNano').nanoScroller({ scroll: 'top' });
+      if (isNewRoom) {
+        socket.emit('change room', roomId);
+      }
     });
 
-    socket.on('notify', function(content, type){
-      new PNotify({
-        text: content,
-        addclass: 'notice-' + type,
-        animate: {
-          animate: true,
-          in_class: 'rotateInDownLeft',
-          out_class: 'rotateOutUpRight'
-        },
-        icon: false
-      });
+    // socket.on('notify', function(content, type){
+    //   new PNotify({
+    //     text: content,
+    //     addclass: 'notice-' + type,
+    //     animate: {
+    //       animate: true,
+    //       in_class: 'rotateInDownLeft',
+    //       out_class: 'rotateOutUpRight'
+    //     },
+    //     icon: false
+    //   });
+    // });
+
+    jQuery(document).ready(function($) {
+      socket.emit('change room', '<%= target %>');
     });
+
   </script>
 </html>
