@@ -13,54 +13,22 @@
   <body>
     <div class="main-dashboard">
       <div class="table-panel">
-        <div class="left-bar table-child">
+        <div class="left-bar table-child ver-mid">
+          <div class="search-bar">
+            <div class="table-panel">
+              <div class="table-child ver-mid">
+                <input id="searchInput" type="text" class="no-outline" name="search" placeholder="Search ...">
+              </div>
+              <div class="table-child add-room-box ver-mid">
+                <button class="new-room no-outline" type="button" data-toggle="modal" data-target="#newRoomModal">
+                  <img src="./images/add-icon.svg" class="add-icon">
+                </button>
+              </div>
+            </div>
+          </div>
           <div id="leftBarNano" class="nano">
             <div class="nano-content">
-              <ul class="list-target list-unstyled" id="listTarget">
-                <li data-target-id="ID" class="target-item">
-                  <div class="table-panel">
-                    <div class="table-child ver-mid user-avatar">
-                      <img src="./images/default-user.png" alt="User name" class="img-circle">
-                    </div>
-                    <div class="table-child ver-mid chat-del">
-                      <h3 class="user-name">Lee Sin</h3>
-                      <p class="chat-status">Hey !! are you OK ? Hey !! are you OK ? Hey !! are you OK ? Hey !! are you OK ?</p>
-                    </div>
-                  </div>
-                </li>
-                <li data-target-id="ID" class="target-item new-message">
-                  <div class="table-panel">
-                    <div class="table-child ver-mid user-avatar">
-                      <img src="./images/default-user.png" alt="User name" class="img-circle">
-                    </div>
-                    <div class="table-child ver-mid chat-del">
-                      <h3 class="user-name">Lee Sin</h3>
-                      <p class="chat-status">Hey !! are you OK ? Hey !! are you OK ? Hey !! are you OK ? Hey !! are you OK ?</p>
-                    </div>
-                  </div>
-                </li>
-                <li data-target-id="ID" class="target-item avtive">
-                  <div class="table-panel">
-                    <div class="table-child ver-mid user-avatar">
-                      <img src="./images/default-user.png" alt="User name" class="img-circle">
-                    </div>
-                    <div class="table-child ver-mid chat-del">
-                      <h3 class="user-name">Lee Sin</h3>
-                      <p class="chat-status">Hey !! are you OK ? Hey !! are you OK ? Hey !! are you OK ? Hey !! are you OK ?</p>
-                    </div>
-                  </div>
-                </li>
-                <li data-target-id="ID" class="target-item">
-                  <div class="table-panel">
-                    <div class="table-child ver-mid user-avatar">
-                      <img src="./images/default-user.png" alt="User name" class="img-circle">
-                    </div>
-                    <div class="table-child ver-mid chat-del">
-                      <h3 class="user-name">Lee Sin</h3>
-                      <p class="chat-status">Hey !! are you OK ? Hey !! are you OK ? Hey !! are you OK ? Hey !! are you OK ?</p>
-                    </div>
-                  </div>
-                </li>
+              <ul class="list-target list-unstyled" id="listRooms">
               </ul>
             </div>
           </div>
@@ -104,7 +72,7 @@
             </div>
           </div>
           <div class="form-box">
-            <form id="form" onsubmit="return false;">
+            <form id="formMessages" onsubmit="return false;">
               <div class="table-panel">
                 <div class="table-child ver-mid">
                   <input data-target="<%= target %>" type="text" id="messageInput" class="message-input no-outline" placeholder="Enter message ..." autofocus>
@@ -118,27 +86,144 @@
         </div>
       </div>
     </div>
+    
+    <div class="modal fade" id="newRoomModal" tabindex="-1" role="dialog" aria-labelledby="newRoomLabel">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h4 class="modal-title" id="newRoomLabel">Create new room</h4>
+          </div>
+          <form id="formAddRoom" onsubmit="return false;">
+            <div class="modal-body">
+              <div class="room-form-group">
+                <div class="table-panel">
+                  <div class="table-child ver-mid">
+                    <label for="roomTitleInput">Room title <br /> <span class="label-trick">( 3 characters minimum )</span></label>
+                  </div>
+                  <div class="table-child ver-mid">
+                    <input id="roomTitleInput" class="no-outline form-validate" type="text">
+                  </div>
+                </div>
+              </div>
+              <div class="room-form-group">
+                <div class="table-panel">
+                  <div class="table-child ver-mid">
+                    Private room
+                  </div>
+                  <div class="table-child ver-mid">
+                    <div class="switch-box">
+                      <input id="privateRoomInput" class="password-toggle password-toggle-round" type="checkbox">
+                      <label for="privateRoomInput" data-toggle="collapse" data-target="#usePassword" aria-expanded="false" aria-controls="usePassword" id="privateRoomInputLabel"></label>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="collapse" id="usePassword">
+                <div class="room-form-group">
+                  <div class="table-panel">
+                    <div class="table-child ver-mid">
+                      <label for="roomPasswordInput">Password <br /> <span class="label-trick">( 6 characters minimum )</span></label>
+                    </div>
+                    <div class="table-child ver-mid">
+                      <input id="roomPasswordInput" class="no-outline form-validate" type="password">
+                    </div>
+                  </div>
+                </div>
+                <div class="room-form-group">
+                  <div class="table-panel">
+                    <div class="table-child ver-mid">
+                      <label for="roomComfirmPasswordInput">Comfirm password</label>
+                    </div>
+                    <div class="table-child ver-mid">
+                      <input id="roomComfirmPasswordInput" class="no-outline form-validate" type="password">
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="beef-btn btn-no no-outline" data-dismiss="modal">Cancel</button>
+              <button class="beef-btn btn-yes no-outline" onclick="addNewRoom();">Create room</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
   </body>
   <script src='/socket.io/socket.io.js'></script>
   <script src='https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js'></script>
   <script src='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js'></script>
   <script src='/javascripts/pnotify.min.js'></script>
   <script src='/javascripts/nanoscroller.min.js'></script>
-  <script type="text/javascript">
-    $("#leftBarNano").nanoScroller({ scroll: 'top' });
-    $("#mainChatNano").nanoScroller({ scroll: 'bottom' });
 
+  <script type="text/javascript">
     var socket = io();
+
+    $('#leftBarNano').nanoScroller({ scroll: 'top' });
+    $('#mainChatNano').nanoScroller({ scroll: 'bottom' });
+
+    function addNewRoom() {
+      var room_title = $('#roomTitleInput').val();
+      var is_private_room = $('#privateRoomInputLabel').attr('aria-expanded');
+      var room_password = $('#roomPasswordInput').val();
+      var room_comfirm_password = $('#roomComfirmPasswordInput').val();
+
+      if (validateNewRoomForm(room_title, is_private_room, room_password, room_comfirm_password)) {
+        socket.emit('new room', room_title, is_private_room, room_password, room_comfirm_password);
+        $('#newRoomModal').modal('hide');
+        $('#usePassword').collapse('hide');
+        $('#roomTitleInput').val('');
+        $('#roomPasswordInput').val('');
+        $('#roomComfirmPasswordInput').val('');
+      };
+    };
+
     function sendMessage() {
       socket.emit('new message', $('#messageInput').data('target'), $('#messageInput').val());
       $('#messageInput').val('');
       $('#messageInput').focus();
+    };
+
+    function validateNewRoomForm(room_title, is_private_room, room_password, room_comfirm_password) {
+      var errorMessage = '';
+      if (room_title.length < 3) {
+        $('#roomTitleInput').addClass('has-error');
+        errorMessage += 'room_title \n';
+      } else {
+        $('#roomTitleInput').removeClass('has-error');
+      };
+
+      if (is_private_room == 'true' && room_password.length < 6) {
+        $('#roomPasswordInput').addClass('has-error');
+        errorMessage += 'room_password \n';
+      } else {
+        $('#roomPasswordInput').removeClass('has-error');
+      };
+
+      if (is_private_room == 'true' && room_password != room_comfirm_password) {
+        $('#roomComfirmPasswordInput').addClass('has-error');
+        errorMessage += 'room_comfirm_password \n';
+      } else {
+        $('#roomComfirmPasswordInput').removeClass('has-error');
+      };
+
+      if (errorMessage == '') {
+        return true;
+      } else {
+        return false;
+      }
     }
 
     socket.on('chat message', function(listMessageTarget, messageHtml){
       $(listMessageTarget).append(messageHtml);
       $("#mainChatNano").nanoScroller();
       $("#mainChatNano").nanoScroller({ scroll: 'bottom' });
+    });
+
+    socket.on('add new room', function(roomHtml){
+      $('#listRooms').prepend(roomHtml);
+      $('#leftBarNano').nanoScroller();
+      $('#leftBarNano').nanoScroller({ scroll: 'top' });
     });
 
     socket.on('notify', function(content, type){
