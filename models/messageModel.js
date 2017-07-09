@@ -8,7 +8,15 @@ var create = function (data, callback){
 };
 
 var list = function(callback){
-  var listMessages = messageModel.find(callback);
+  messageModel.find().exec(callback);
 }
 
-module.exports = { create, list };
+var findbyRoom = function(room_id, callback) {
+  messageModel.find({ room_id: room_id }).sort({ create_at: 'ascending'}).exec(callback);
+}
+
+var lastMessageinRoom = function(room_id, callback) {
+  messageModel.find({ room_id: room_id }).sort({ create_at: 'descending'}).limit(1).exec(callback);
+}
+
+module.exports = { create, list, findbyRoom, lastMessageinRoom };
