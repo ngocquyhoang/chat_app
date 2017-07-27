@@ -1,22 +1,22 @@
 'use strict';
 
-var messageModel = require('../database').models.message;
+var Message = require('../database').schemas.message;
 
 var create = function (data, callback){
-  var newMessage = new messageModel(data);
+  var newMessage = new Message(data);
   newMessage.save(callback);
 };
 
 var list = function(callback){
-  messageModel.find().exec(callback);
+  Message.find().exec(callback);
 }
 
 var findbyRoom = function(room_id, callback) {
-  messageModel.find({ room_id: room_id }).sort({ create_at: 'ascending'}).exec(callback);
+  Message.find({ room_id: room_id }).sort({ create_at: 'ascending'}).exec(callback);
 }
 
 var lastMessageinRoom = function(room_id, callback) {
-  messageModel.find({ room_id: room_id }).sort({ create_at: 'descending'}).limit(1).exec(callback);
+  Message.find({ room_id: room_id }).sort({ create_at: 'descending'}).limit(1).exec(callback);
 }
 
 module.exports = { create, list, findbyRoom, lastMessageinRoom };

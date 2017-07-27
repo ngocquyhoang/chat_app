@@ -9,8 +9,9 @@ Mongoose.connection.on('error', function(err) {
 });
 
 module.exports = { Mongoose, 
-  models: {
+  schemas: {
     message: require('./schemas/message_schema.js'),
-    room: require('./schemas/room_schema.js')
+    room: require('./schemas/room_schema.js'),
+    user: require('./schemas/user_schema.js')
   }
 };
